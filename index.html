@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF ↔ Image Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-exchange-alt"></i> PDF ↔ Image Converter</h1>
+            <p class="subtitle">Convert PDF pages to images and images to PDF seamlessly</p>
+        </header>
+
+        <div class="main-content">
+            <div class="conversion-type">
+                <div class="type-selector">
+                    <button class="type-btn active" data-type="pdf-to-image">
+                        <i class="fas fa-file-pdf"></i> PDF to Images
+                    </button>
+                    <button class="type-btn" data-type="image-to-pdf">
+                        <i class="fas fa-images"></i> Images to PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- PDF to Image Section -->
+            <div class="converter-section active" id="pdf-to-image">
+                <div class="upload-area" id="pdf-upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Upload PDF File</h3>
+                    <p>Drag & drop or click to select a PDF file</p>
+                    <input type="file" id="pdf-input" accept=".pdf">
+                    <p class="file-info">Max file size: 10MB</p>
+                </div>
+
+                <div class="preview-section">
+                    <h3><i class="fas fa-eye"></i> Preview</h3>
+                    <div class="preview-container">
+                        <div class="preview-placeholder" id="pdf-preview-placeholder">
+                            <i class="far fa-file-pdf"></i>
+                            <p>PDF preview will appear here</p>
+                        </div>
+                        <div class="pdf-preview" id="pdf-preview">
+                            <div class="pdf-info">
+                                <h4 id="pdf-name">No PDF selected</h4>
+                                <p id="page-count">Pages: 0</p>
+                            </div>
+                            <div class="page-thumbnails" id="page-thumbnails">
+                                <!-- PDF page thumbnails will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3><i class="fas fa-cog"></i> Conversion Options</h3>
+                    <div class="options-grid">
+                        <div class="option">
+                            <label for="image-format">Image Format</label>
+                            <select id="image-format">
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="image-quality">Quality (1-10)</label>
+                            <input type="range" id="image-quality" min="1" max="10" value="8">
+                            <span id="quality-value">8</span>
+                        </div>
+                        <div class="option">
+                            <label for="scale-factor">Scale Factor</label>
+                            <select id="scale-factor">
+                                <option value="1">1x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                                <option value="3">3x</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="pages-to-convert">Pages to Convert</label>
+                            <select id="pages-to-convert">
+                                <option value="all">All Pages</option>
+                                <option value="range">Custom Range</option>
+                            </select>
+                            <div class="page-range" id="page-range-input" style="display: none;">
+                                <input type="number" id="page-start" min="1" value="1" placeholder="Start">
+                                <span>to</span>
+                                <input type="number" id="page-end" min="1" value="1" placeholder="End">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <button id="convert-pdf-to-image" class="convert-btn" disabled>
+                        <i class="fas fa-sync-alt"></i> Convert PDF to Images
+                    </button>
+                    <div class="download-options" id="pdf-download-options" style="display: none;">
+                        <h4><i class="fas fa-download"></i> Download Options</h4>
+                        <div class="download-buttons">
+                            <button class="download-btn" id="download-all">
+                                <i class="fas fa-download"></i> Download All as ZIP
+                            </button>
+                            <button class="download-btn" id="download-current">
+                                <i class="fas fa-image"></i> Download Current Preview
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image to PDF Section -->
+            <div class="converter-section" id="image-to-pdf">
+                <div class="upload-area" id="image-upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Upload Images</h3>
+                    <p>Drag & drop or click to select multiple images</p>
+                    <input type="file" id="image-input" accept="image/*" multiple>
+                    <p class="file-info">Supports JPG, PNG, WebP. Max 20 files</p>
+                </div>
+
+                <div class="image-list-section">
+                    <h3><i class="fas fa-list"></i> Selected Images</h3>
+                    <div class="image-list" id="image-list">
+                        <!-- Image items will be added here -->
+                        <div class="empty-list">
+                            <i class="far fa-images"></i>
+                            <p>No images selected yet</p>
+                        </div>
+                    </div>
+                    <div class="image-controls">
+                        <button id="reorder-images" class="control-btn" disabled>
+                            <i class="fas fa-sort"></i> Reorder
+                        </button>
+                        <button id="clear-all-images" class="control-btn" disabled>
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3><i class="fas fa-eye"></i> PDF Preview</h3>
+                    <div class="preview-container">
+                        <div class="preview-placeholder" id="pdf-output-preview-placeholder">
+                            <i class="fas fa-file-pdf"></i>
+                            <p>Generated PDF preview will appear here</p>
+                        </div>
+                        <canvas id="pdf-output-preview"></canvas>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3><i class="fas fa-cog"></i> PDF Options</h3>
+                    <div class="options-grid">
+                        <div class="option">
+                            <label for="page-size">Page Size</label>
+                            <select id="page-size">
+                                <option value="a4">A4</option>
+                                <option value="letter">Letter</option>
+                                <option value="legal">Legal</option>
+                                <option value="fit">Fit to Image</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="page-orientation">Orientation</label>
+                            <select id="page-orientation">
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <label for="margin-size">Margin (mm)</label>
+                            <input type="range" id="margin-size" min="0" max="50" value="10">
+                            <span id="margin-value">10mm</span>
+                        </div>
+                        <div class="option">
+                            <label for="pdf-quality">PDF Quality</label>
+                            <select id="pdf-quality">
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <button id="convert-images-to-pdf" class="convert-btn" disabled>
+                        <i class="fas fa-file-pdf"></i> Create PDF from Images
+                    </button>
+                    <div class="download-options" id="image-download-options" style="display: none;">
+                        <h4><i class="fas fa-download"></i> Download PDF</h4>
+                        <button class="download-btn" id="download-pdf">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with <i class="fas fa-heart"></i> using HTML, CSS & JavaScript</p>
+            <p class="footer-links">
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                <a href="#"><i class="fas fa-bug"></i> Report Issue</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
